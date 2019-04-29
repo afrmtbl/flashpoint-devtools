@@ -1,5 +1,7 @@
 # flashpoint-devtools
 
+![Screenshot of the program](https://github.com/afrmtbl/flashpoint-devtools/blob/master/screenshot.png)
+
 ## Installation
 
 1. Download the latest release
