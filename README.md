@@ -18,6 +18,7 @@ pip install requests
 cd flashpoint-devtools
 python devtools.py
 ```
+`requests` isn't actually required yet, but most likely will be in the future
 
 ## Building
 Note: will only build for current platform
