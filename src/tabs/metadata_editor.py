@@ -4,11 +4,11 @@ import tkinter.ttk as ttk
 from tkinter.filedialog import askopenfilename, asksaveasfile
 import tkinter.messagebox
 
-import xml.etree.ElementTree as ET
 import threading
 import os
 
 from ..util.changes_parser import ChangesParser
+
 
 class MetadataEditorTab(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -70,8 +70,8 @@ class MetadataEditorTab(ttk.Frame):
         self.generating_xml = True
         self.generate_button.configure(state=tk.DISABLED)
 
-        changes = ChangesParser.parse_changes_file(changes_file_path)
         try:
+            changes = ChangesParser.parse_changes_file(changes_file_path)
             updated_xml = ChangesParser.get_updated_xml(changes, xml_file_path)
 
             ftypes = [("XML File", "*.xml")]
@@ -83,6 +83,10 @@ class MetadataEditorTab(ttk.Frame):
             tkinter.messagebox.showerror("Unable to find game", f"The following game ID was specified in the changes file, but couldn\'t be found in the XML:\n\n{e.game_id}")
         except ChangesParser.MissingElement as e:
             tkinter.messagebox.showerror("Unable to find element", f"Game with ID \'{e.game_id}\' is missing the \'{e.element_name}\' element")
+        except ChangesParser.InvalidElementName as e:
+            tkinter.messagebox.showerror("Invalid element name", str(e))
+        except ChangesParser.NoCurrentGame as e:
+            tkinter.messagebox.showerror("No game specified", str(e))
         finally:
             self.generating_xml = False
             self.generate_button.configure(state=tk.NORMAL)
@@ -92,9 +96,9 @@ class MetadataEditorTab(ttk.Frame):
         if not self.generating_xml:
 
             thread = threading.Thread(
-                target=self.update_metadata, 
+                target=self.update_metadata,
                 args=(
-                    self.xml_path.get(), 
+                    self.xml_path.get(),
                     self.change_file_path.get()
                 )
             )
