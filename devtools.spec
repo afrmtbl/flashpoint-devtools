@@ -1,10 +1,16 @@
 # -*- mode: python -*-
+import os
+import sys
+import pathlib
+
+drive_letter = pathlib.Path.home().drive
+sys.path.insert(0, f"{drive_letter}/Windows/System32/downlevel")
 
 block_cipher = None
 
 
 a = Analysis(['devtools.py', 'devtools.spec'],
-             pathex=['C:\\Users\\afrm\\Desktop\\devtools'],
+             pathex=[os.getcwd()],
              binaries=[],
              datas=[("icon.ico", ".")],
              hiddenimports=[],
