@@ -7,7 +7,8 @@ XMLChanges = Dict[str, ChangeGroup]
 
 aliased_keys = {
     "Extreme": "Hide",
-    "Launch Command": "CommandLine"
+    "Launch Command": "CommandLine",
+    "Note": "Notes"
 };
 
 
