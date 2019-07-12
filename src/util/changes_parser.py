@@ -5,6 +5,11 @@ from typing import Dict, Tuple
 ChangeGroup = Tuple[str, str]
 XMLChanges = Dict[str, ChangeGroup]
 
+aliased_keys = {
+    "Extreme": "Hide",
+    "Launch Command": "CommandLine"
+};
+
 
 class ChangesParser:
     class GameNotFound(Exception):
@@ -52,6 +57,9 @@ class ChangesParser:
 
                         key = key.strip()
                         value = value.strip()
+
+                        if key in aliased_keys:
+                            key = aliased_keys[key]
 
                         changes[current_game].append((key, value))
                     else:
@@ -102,4 +110,4 @@ if __name__ == '__main__':
     changes = ChangesParser.parse_changes_file(f"{home}/Desktop/changes.txt")
     updated_xml = ChangesParser.get_updated_xml(changes, f"{home}/Desktop/Flash.xml")
 
-    # print(ET.tostring(updated_xml.getroot(), method="xml", encoding="unicode"))
+    print(ET.tostring(updated_xml.getroot(), method="xml", encoding="unicode"))
