@@ -9,6 +9,16 @@ import os
 
 from ..util.changes_parser import ChangesParser
 
+ERROR_LOADING_ELEMENTS_WHITELIST = False
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+try:
+    with open(ROOT_DIR + "/../../elements_whitelist.txt", encoding="utf8") as file:
+        create_elements_whitelist = [line.strip() for line in file if line.strip()]
+except FileNotFoundError:
+    create_elements_whitelist = []
+    ERROR_LOADING_ELEMENTS_WHITELIST = True
+
 
 class MetadataEditorTab(ttk.Frame):
     def __init__(self, parent, *args, **kwargs):
@@ -21,6 +31,9 @@ class MetadataEditorTab(ttk.Frame):
         self.columnconfigure(2, weight=1)
 
         self.add_widgets()
+
+        if ERROR_LOADING_ELEMENTS_WHITELIST:
+            tkinter.messagebox.showerror("Elements Whitelist Not Found", "The elements_whitelist.txt could not be found. Running with empty whitelist.")
 
     def add_widgets(self):
         description = ttk.Label(self, text="Quickly edit metadata from the specified XML file using a list of changes", style="MY.TLabel")
@@ -72,7 +85,7 @@ class MetadataEditorTab(ttk.Frame):
 
         try:
             changes = ChangesParser.parse_changes_file(changes_file_path)
-            updated_xml = ChangesParser.get_updated_xml(changes, xml_file_path)
+            updated_xml = ChangesParser.get_updated_xml(changes, xml_file_path, create_elements_whitelist)
 
             ftypes = [("XML File", "*.xml")]
             save_file = asksaveasfile(mode="wb", defaultextension=".xml", initialfile="updated", filetypes=ftypes)
@@ -82,7 +95,7 @@ class MetadataEditorTab(ttk.Frame):
         except ChangesParser.GameNotFound as e:
             tkinter.messagebox.showerror("Unable to find game", f"The following game ID was specified in the changes file, but couldn\'t be found in the XML:\n\n{e.game_id}")
         except ChangesParser.MissingElement as e:
-            tkinter.messagebox.showerror("Unable to find element", f"Game with ID \'{e.game_id}\' is missing the \'{e.element_name}\' element")
+            tkinter.messagebox.showerror("Unable to find element", f"Game with ID \'{e.game_id}\' is missing the \'{e.element_name}\' element.\n\nIf you'd prefer the element be created instead, add it on a new line in the elements whitelist (elements_whitelist.txt)")
         except ChangesParser.InvalidElementName as e:
             tkinter.messagebox.showerror("Invalid element name", str(e))
         except ChangesParser.NoCurrentGame as e:

@@ -9,7 +9,7 @@ aliased_keys = {
     "Extreme": "Hide",
     "Launch Command": "CommandLine",
     "Note": "Notes"
-};
+}
 
 
 class ChangesParser:
@@ -70,7 +70,7 @@ class ChangesParser:
 
     """Updates an ElementTree based on the changes provided"""
     @staticmethod
-    def get_updated_xml(changes: XMLChanges, source_xml_path):
+    def get_updated_xml(changes: XMLChanges, source_xml_path: str, create_elements_whitelist: list):
         tree = ET.parse(source_xml_path)
         root = tree.getroot()
         # collect game IDs that were sucessfully changed
@@ -90,8 +90,11 @@ class ChangesParser:
 
                     if key_element is not None:
                         key_element.text = value
+                    elif key in create_elements_whitelist:
+                        created_el = ET.SubElement(game, key)
+                        created_el.text = value
                     else:
-                        error_text: str = f"{game_id} is missing element: \'{key}\'"
+                        error_text: str = f"{game_id} is missing element: \'{key}\'. If you'd prefer the element be created instead, add it on a new line in the elements whitelist (elements_whitelist.txt)"
                         raise ChangesParser.MissingElement(error_text, game_id, key)
             # mark the game as sucessfully changed
             results.add(game_id)
@@ -109,6 +112,8 @@ if __name__ == '__main__':
     home = str(Path.home())
 
     changes = ChangesParser.parse_changes_file(f"{home}/Desktop/changes.txt")
-    updated_xml = ChangesParser.get_updated_xml(changes, f"{home}/Desktop/Flash.xml")
+    updated_xml = ChangesParser.get_updated_xml(changes, f"{home}/Desktop/Flash.xml", [])
+
+    # updated_xml.write("updated.xml", encoding="utf8")
 
     print(ET.tostring(updated_xml.getroot(), method="xml", encoding="unicode"))
