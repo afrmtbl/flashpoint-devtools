@@ -39,20 +39,20 @@ class MetadataValidatorTab(ttk.Frame):
 
         self.tree["columns"] = ("value", "type")
 
-        self.tree.column("#0", width=270, minwidth=270, stretch=tk.NO)
-        self.tree.column("value", stretch=tk.NO)
-        self.tree.column("type")
+        self.tree.column("#0", width=120)
+        self.tree.column("value", width=50)
+        self.tree.column("type", width=50)
 
         self.tree.heading("#0", text="Game ID", anchor=tk.W)
         self.tree.heading("value", text="Info", anchor=tk.W)
         self.tree.heading("type", text="File", anchor=tk.W)
 
         scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.tree.yview)
-        scrollbar.grid(row=1, column=2, sticky=tk.NS)
+        scrollbar.grid(row=1, column=2, sticky=tk.NS + tk.E)
 
         self.tree.configure(yscrollcommand=scrollbar.set)
 
-        self.tree.grid(row=1, column=1)
+        self.tree.grid(row=1, column=1, sticky=tk.NW + tk.SE)
 
         buttons_frame = ttk.Frame(self, style="MY.TFrame")
 

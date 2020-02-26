@@ -28,7 +28,7 @@ class MetadataEditorTab(ttk.Frame):
 
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=10)
-        self.columnconfigure(2, weight=1)
+        self.columnconfigure(2, weight=0)
 
         self.add_widgets()
 
@@ -54,10 +54,12 @@ class MetadataEditorTab(ttk.Frame):
         self.browse_changes_button.grid(row=2, column=2, sticky=tk.E)
 
         self.help_button = ttk.Button(self, text="Help", command=self.show_help)
-        self.help_button.grid(row=4, column=1, sticky=tk.E, pady=20)
+        self.help_button.grid(row=4, column=1, sticky=tk.E, pady=20, padx=10)
 
         self.generate_button = ttk.Button(self, text="Generate XML", command=self.threaded_update)
         self.generate_button.grid(row=4, column=2, sticky=tk.E, pady=20)
+
+        ttk.Label(self, text="Empty element whitelist...", style="MY.TLabel").grid(row=2, column=0)
 
     def choose_xml_file(self):
         file = askopenfilename(filetypes=[("XML File", "*.xml")])

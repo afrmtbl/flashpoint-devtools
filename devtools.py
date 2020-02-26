@@ -4,8 +4,8 @@ import tkinter.ttk as ttk
 from src.tabs.metadata_editor import MetadataEditorTab
 from src.tabs.metadata_validator import MetadataValidatorTab
 
-WINDOW_WIDTH = 460
-WINDOW_HEIGHT = 200
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 350
 
 root = tk.Tk()
 root.title("Flashpoint DevTools")
@@ -13,7 +13,7 @@ root.title("Flashpoint DevTools")
 root.iconbitmap("icon.ico")
 
 root.minsize(WINDOW_WIDTH, WINDOW_HEIGHT)
-# root.maxsize(WINDOW_WIDTH, WINDOW_HEIGHT)
+root.maxsize(WINDOW_WIDTH, WINDOW_HEIGHT)
 root.resizable(True, True)
 
 root.rowconfigure(0, weight=1)
