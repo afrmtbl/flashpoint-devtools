@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from tkinter.filedialog import askopenfilename, asksaveasfile
+from tkinter.filedialog import askopenfilename, asksaveasfile, askdirectory
 import tkinter.messagebox
 
 import threading
@@ -37,9 +37,9 @@ class MetadataEditorTab(ttk.Frame):
 
     def add_widgets(self):
         description = ttk.Label(self, text="Quickly edit metadata from the specified XML file using a list of changes", style="MY.TLabel")
-        description.grid(columnspan=3, sticky="W", pady=(5, 10))
+        description.grid(columnspan=3, pady=(5, 10))
 
-        ttk.Label(self, text="XML File", style="MY.TLabel").grid(row=1, column=0)
+        ttk.Label(self, text="XML Directory", style="MY.TLabel").grid(row=1, column=0)
 
         self.xml_path = ttk.Entry(self)
         self.xml_path.grid(row=1, column=1, sticky=tk.EW, pady=(5, 5))
@@ -59,8 +59,12 @@ class MetadataEditorTab(ttk.Frame):
         self.generate_button = ttk.Button(self, text="Generate XML", command=self.threaded_update)
         self.generate_button.grid(row=4, column=2, sticky=tk.E, pady=20)
 
+        if ERROR_LOADING_ELEMENTS_WHITELIST or len(create_elements_whitelist) < 1:
+            whitelist_warning = ttk.Label(self, text="Running with empty elements whitelist...", style="WARN.TLabel", font="TkDefaultFont 10 bold")
+            whitelist_warning.grid(row=4, column=0, columnspan=3, sticky=tk.W)
+
     def choose_xml_file(self):
-        file = askopenfilename(filetypes=[("XML File", "*.xml")])
+        file = askopenfilename()
         self.xml_path.delete(0, tk.END)
         self.xml_path.insert(0, file)
 
@@ -133,6 +137,7 @@ GAME dbde64aa-fbd7-4837-bba5-63d923092486
     Title: Swag
     Genre: Adventure, Point'n'Click
     Publisher: Newgrounds.com
+
 GAME ea84e831-ee4f-44ec-b769-b657c8ffa8e3
     Genre: Puzzle, Tetris, Physics
 

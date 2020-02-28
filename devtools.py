@@ -3,10 +3,7 @@ import tkinter.ttk as ttk
 
 from src.tabs.metadata_editor import MetadataEditorTab
 
-# not complete yet
-# from src.tabs.missing_files import MissingFilesTab
-
-WINDOW_WIDTH = 460
+WINDOW_WIDTH = 550
 WINDOW_HEIGHT = 200
 
 root = tk.Tk()
@@ -25,13 +22,13 @@ style = ttk.Style()
 style.configure("MY.TFrame", background="white")
 style.configure("MY.TLabel", background="white")
 
+style.configure("WARN.TLabel", background="white", foreground="red")
+
 note = ttk.Notebook(root)
 
 tab1 = MetadataEditorTab(note, style="MY.TFrame")
-# tab2 = MissingFilesTab(note, style="MY.TFrame")
 
 note.add(tab1, text="Metadata Editor", padding="24px 0px")
-# note.add(tab2, text="Missing Files", padding="24px 0px")
-note.grid(sticky=tk.NW+tk.SE)
+note.grid(sticky=tk.NW + tk.SE)
 
 root.mainloop()
