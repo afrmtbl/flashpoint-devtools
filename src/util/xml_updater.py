@@ -119,7 +119,7 @@ try_get_ret = Union[ET.Element, Tuple[ET.Element, Optional[str]]]
 def try_get_element(element_name: str, root: ET.Element, get_text: bool = False, raise_on_no_text: bool = False) -> try_get_ret:
     """
     Tries to retrieve an `element_name` child inside of `root` and returns the element and
-    possibly its text if successful.
+    optionally its text if successful.
     """
 
     el = root.find(element_name)
@@ -164,7 +164,8 @@ def update_xml_element(xml_root: ET.Element, element: ET.Element, changes: dict,
 
 
 def handle_additional_apps(xml_root: ET.Element, game_id: str, changes: dict, create_elements_whitelist: list):
-    """Handles creating new and updating existing additional applications.
+    """
+    Handles creating new and updating existing additional applications.
 
     TODO: Special handling will be included for :extras: and :message: applications.
     """
