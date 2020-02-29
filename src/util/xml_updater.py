@@ -140,7 +140,8 @@ def try_get_element(element_name: str, root: ET.Element, get_text: bool = False,
 
 def update_xml_element(xml_root: ET.Element, element: ET.Element, changes: dict, game_id: str, create_elements_whitelist: list, is_additional_application: bool = False):
     """
-    Updates the XML tree using the data from `changes`, creating new elements if necessary."""
+    Updates the XML tree using the data from `changes`, creating new elements if necessary.
+    """
 
     # `key` being the element name
     # `value` being the text value we want to change it to
