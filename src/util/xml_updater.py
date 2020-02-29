@@ -94,7 +94,7 @@ def process_yaml(yaml_document: Dict, is_additional_application: bool = False):
 
 
 def parse_changes_file(file_path: str) -> Dict:
-    """Turns the user-supplied changes file into a Python dictionary."""
+    """Turns the user-supplied changes file into a dictionary."""
 
     changes = {}
 
