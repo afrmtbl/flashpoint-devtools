@@ -1,0 +1,3 @@
+[submodule "pydiff"]
+	path = pydiff
+	url = https://github.com/afrmtbl/pydiff
