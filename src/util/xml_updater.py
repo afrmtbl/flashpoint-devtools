@@ -253,7 +253,7 @@ def handle_additional_apps(xml_root: ET.Element, game_id: str, changes: dict, cr
                 raise UpdaterExceptions.ForbiddenElementChange(msg)
 
 
-def get_updated_xml(changes: dict, source_xml_path: str, create_elements_whitelist: list):
+def get_updated_xml(changes: dict, source_xml_path: str, create_elements_whitelist: list, raise_on_missing_game: bool = True):
     """Wrapper function for `update_xml_element` that simplifies applying changes to an XML file."""
 
     parser = ET.XMLParser(remove_blank_text=True)
@@ -273,9 +273,10 @@ def get_updated_xml(changes: dict, source_xml_path: str, create_elements_whiteli
             # Mark the game as successfully changed
             results.add(game_id)
 
-    for game_id in changes:
-        if game_id not in results:
-            raise UpdaterExceptions.GameNotFound(f"Unable to find game: \'{game_id}\'", game_id)
+    if raise_on_missing_game:
+        for game_id in changes:
+            if game_id not in results:
+                raise UpdaterExceptions.GameNotFound(f"Unable to find game: \'{game_id}\'", game_id)
 
     return tree, results
 
