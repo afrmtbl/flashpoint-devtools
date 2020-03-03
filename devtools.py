@@ -1,7 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from src.tabs.metadata_editor import MetadataEditorTab
+from src.ui.metadata_editor import MetadataEditorTab
 
 WINDOW_WIDTH = 550
 WINDOW_HEIGHT = 200
