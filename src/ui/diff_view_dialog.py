@@ -6,7 +6,6 @@ from tkinter.font import Font
 
 from tkinter.messagebox import askokcancel
 
-import gc
 import os
 
 
@@ -56,12 +55,6 @@ class DiffViewDialog(tk.Toplevel):
                 if not result:
                     return
 
-            pydiff.run(diff_left_path, diff_right_path)
-            # https://www.bountysource.com/issues/63599168-tkinter-crash-when-running-multithreaded-fix-inside-for-tcl_asyncdelete-async-handler-deleted-by-the-wrong-thread
-            gc.collect()
-
-        view_diff = ttk.Button(self.buttons_frame, text="View Diff", command=show_diff)
-        view_diff.grid(row=0, column=0, sticky=tk.SE, pady=10, padx=110)
         ttk.Button(self.buttons_frame, text="Close", command=self.destroy).grid(row=0, column=0, sticky=tk.SE, pady=10, padx=20)
 
         # Set to be on top of the main window
