@@ -1,24 +1,31 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-from tkinter.filedialog import askopenfilename, asksaveasfile, askdirectory
+from tkinter.filedialog import askopenfilename, askdirectory
 import tkinter.messagebox
 
 import threading
 import os
 from shutil import copy2
 
-from src.util.changes_parser import ChangesParser
-
-from src.util.xml_updater import parse_changes_file, get_updated_xml, UpdaterExceptions
+from src.util.xml_updater import ChangesParser, XmlUpdater
 from src.util.xml_updater import explain_changes
 
 from src.ui.diff_view_dialog import DiffViewDialog
+from src.ui.error_viewer_dialog import ErrorViewerDialog
+
+try:
+    import winsound
+except ImportError:
+    pass
+
 
 ERROR_LOADING_ELEMENTS_WHITELIST = False
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 BASE_DIR = os.path.normpath(ROOT_DIR + "/../..")
+
+BACKUPS_DIR = BASE_DIR + "/xmlbackups"
 try:
     with open(BASE_DIR + "/elements_whitelist.txt", encoding="utf8") as file:
         create_elements_whitelist = [line.strip() for line in file if line.strip()]
@@ -28,11 +35,10 @@ except FileNotFoundError:
 
 
 def backup_xml_file(current_file_path, backup_file_name):
-    backups_directory = BASE_DIR + "/xmlbackups"
-    if not os.path.isdir(backups_directory):
-        os.mkdir(backups_directory)
+    if not os.path.isdir(BACKUPS_DIR):
+        os.mkdir(BACKUPS_DIR)
 
-    new_path = f"{backups_directory}/{backup_file_name}"
+    new_path = f"{BACKUPS_DIR}/{backup_file_name}"
     copy2(current_file_path, new_path)
 
     return new_path
@@ -52,8 +58,6 @@ class MetadataEditorTab(ttk.Frame):
 
         if ERROR_LOADING_ELEMENTS_WHITELIST:
             tkinter.messagebox.showerror("Elements Whitelist Not Found", "The elements_whitelist.txt could not be found. Running with empty whitelist.")
-
-        self.view_diff_prompts = []
 
         if os.path.exists(BASE_DIR + "/last_xml_directory.txt"):
             with open(BASE_DIR + "/last_xml_directory.txt", "r", encoding="utf8") as file:
@@ -122,20 +126,37 @@ class MetadataEditorTab(ttk.Frame):
             return
 
         freeze()
-        self.view_diff_prompts.clear()
+
+        changes = {}
 
         try:
-            changes = parse_changes_file(changes_file_path)
-        except UpdaterExceptions.InvalidGameId as e:
+            changes = ChangesParser.parse_changes_file(changes_file_path)
+        except ChangesParser.InvalidGameId as e:
             tkinter.messagebox.showerror("Invalid Game ID", str(e))
-        except UpdaterExceptions.ForbiddenElementChange as e:
+            unfreeze()
+            return
+        except ChangesParser.ForbiddenElementChange as e:
             tkinter.messagebox.showerror("Forbidden Element Change", str(e))
+            unfreeze()
+            return
+        except ChangesParser.NotEnoughDocuments as e:
+            tkinter.messagebox.showerror("Invalid YAML", str(e))
+            unfreeze()
+            return
+        except ChangesParser.DuplicateGameId as e:
+            tkinter.messagebox.showerror("Invalid YAML", str(e))
+            unfreeze()
+            return
 
         platform_xml_files = os.listdir(xml_directory)
         platform_xml_files = [
             file for file in platform_xml_files
             if os.path.isfile(os.path.join(xml_directory, file)) and file.endswith(".xml")
         ]
+
+        view_diff_prompts = []
+        view_error_prompts = []
+        files_backed_up = []
 
         for platform_xml in platform_xml_files:
             # All games have been found and updated
@@ -148,7 +169,8 @@ class MetadataEditorTab(ttk.Frame):
             print("Looking in " + platform_xml)
 
             try:
-                updated_xml, changed_games = get_updated_xml(changes, file_path, create_elements_whitelist, raise_on_missing_game=False)
+                updater = XmlUpdater()
+                updated_xml, changed_games = updater.get_updated_xml(changes, file_path, create_elements_whitelist, raise_on_missing_game=False)
 
                 file_changes = {}
 
@@ -159,23 +181,35 @@ class MetadataEditorTab(ttk.Frame):
                         del changes[game]
 
                     backup_path = backup_xml_file(file_path, platform_xml)
+                    files_backed_up.append(platform_xml)
 
                     updated_xml.write(file_path, encoding="utf8", pretty_print=True)
-
                     explanation = explain_changes(file_changes)
+                    view_diff_prompts.append((backup_path, file_path, explanation, platform_xml))
 
-                    self.view_diff_prompts.append((backup_path, file_path, explanation, platform_xml))
+            except (XmlUpdater.MissingElement, XmlUpdater.MissingElementValue, XmlUpdater.ForbiddenElementChange) as e:
+                # tkinter.messagebox.showerror("Missing element", str(e))
+                view_error_prompts.append(e)
+                del changes[e.game_id]
 
-            except UpdaterExceptions.MissingElement as e:
-                tkinter.messagebox.showerror("Missing element", str(e))
-            except UpdaterExceptions.MissingElementValue as e:
-                tkinter.messagebox.showerror("Missing element value", str(e))
+        restored_backups = False
 
-        if len(changes):
-            tkinter.messagebox.showerror("Unable to find games", "The following games could not be found and were not changed:\n  " + "\n  ".join(changes.keys()))
+        if len(view_error_prompts) or len(changes):
+            text = "\n\n".join([f"{e.game_id}\n      {str(e)}" for e in view_error_prompts])
+            missing_text = "\n\n".join([f"Game with ID \'{game_id}\' could not be found" for game_id in changes])
 
-        for backup_path, file_path, explanation, platform_xml in self.view_diff_prompts:
-            DiffViewDialog(self, explanation, backup_path, file_path, platform_xml)
+            try:
+                winsound.PlaySound("SystemHand", winsound.SND_ALIAS + winsound.SND_ASYNC)
+            except NameError:
+                pass
+
+            title = "One or more errors occurred while updating the XML"
+            restored_backups = ErrorViewerDialog(files_backed_up, BACKUPS_DIR, xml_directory, self, title, missing_text + "\n\n" + text).restored_backups
+            # tkinter.messagebox.showerror("Unable to find games", "The following games could not be found and were not changed:\n  " + "\n  ".join(changes.keys()))
+
+        if not restored_backups:
+            for backup_path, file_path, explanation, platform_xml in view_diff_prompts:
+                DiffViewDialog(backup_path, file_path, self, f"Changes made to {platform_xml}", explanation)
 
         self.change_file_path.delete(0, tk.END)
         unfreeze()
@@ -198,7 +232,7 @@ class MetadataEditorTab(ttk.Frame):
 
         left = "C:\\Users\\afrm\\Desktop\\flashpoint-devtools\\xmlbackups\\Flash.xml"
         right = "C:\\Users\\afrm\\Desktop\\fps\\data\\games\\Flash.xml"
-        DiffViewDialog(self, "Hello there!", left, right, "test.xml")
+        DiffViewDialog(left, right, self, "Changes made to test.xml", "Hello!")
 
 
 #         text = """
