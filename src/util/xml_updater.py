@@ -360,15 +360,17 @@ if __name__ == "__main__":
     changes = ChangesParser.parse_changes_file(f"{home}/Desktop/changes.yml")
     exp = explain_changes(changes)
 
+    print(changes)
+
     # print(exp)
     # import json
     # print(json.dumps(changes, indent=4))
-    updater = XmlUpdater()
+    # updater = XmlUpdater()
 
-    updated_xml, games_changed, games_failed = updater.get_updated_xml(changes, f"{home}/Desktop/platform_xmls/Flash.xml", ["Tags", "OriginalDescription", "ReleaseDate"])
-    print(games_changed)
+    # updated_xml, games_changed, games_failed = updater.get_updated_xml(changes, f"{home}/Desktop/platform_xmls/Flash.xml", ["Tags", "OriginalDescription", "ReleaseDate"])
+    # print(games_changed)
 
-    print(games_failed)
+    # print(games_failed)
 
     # print(changed_games)
 
