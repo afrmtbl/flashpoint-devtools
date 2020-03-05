@@ -8,8 +8,7 @@ import threading
 import os
 from shutil import copy2
 
-from src.util.xml_updater import ChangesParser, XmlUpdater
-from src.util.xml_updater import explain_changes
+from src.util.xml_updater import ChangesParser, XmlUpdater, explain_changes
 
 from src.ui.diff_view_dialog import DiffViewDialog
 from src.ui.error_viewer_dialog import ErrorViewerDialog
