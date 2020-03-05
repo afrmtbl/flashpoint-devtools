@@ -166,31 +166,25 @@ class MetadataEditorTab(ttk.Frame):
 
             file_path = os.path.join(xml_directory, platform_xml)
 
-            print("Looking in " + platform_xml)
+            updater = XmlUpdater()
+            updated_xml, games_changed, games_failed = updater.get_updated_xml(changes, file_path, create_elements_whitelist)
 
-            try:
-                updater = XmlUpdater()
-                updated_xml, changed_games = updater.get_updated_xml(changes, file_path, create_elements_whitelist, raise_on_missing_game=False)
+            changes_in_file = {}
 
-                file_changes = {}
+            view_error_prompts.extend(games_failed)
 
-                if len(changed_games) > 0:
+            if len(games_changed) > 0:
 
-                    for game in changed_games:
-                        file_changes[game] = changes[game]
-                        del changes[game]
+                for game in games_changed:
+                    changes_in_file[game] = changes[game]
+                    del changes[game]
 
-                    backup_path = backup_xml_file(file_path, platform_xml)
-                    files_backed_up.append(platform_xml)
+                backup_path = backup_xml_file(file_path, platform_xml)
+                files_backed_up.append(platform_xml)
 
-                    updated_xml.write(file_path, encoding="utf8", pretty_print=True)
-                    explanation = explain_changes(file_changes)
-                    view_diff_prompts.append((backup_path, file_path, explanation, platform_xml))
-
-            except (XmlUpdater.MissingElement, XmlUpdater.MissingElementValue, XmlUpdater.ForbiddenElementChange) as e:
-                # tkinter.messagebox.showerror("Missing element", str(e))
-                view_error_prompts.append(e)
-                del changes[e.game_id]
+                updated_xml.write(file_path, encoding="utf8", pretty_print=True)
+                explanation = explain_changes(changes_in_file)
+                view_diff_prompts.append((backup_path, file_path, explanation, platform_xml))
 
         restored_backups = False
 
@@ -204,7 +198,7 @@ class MetadataEditorTab(ttk.Frame):
                 pass
 
             title = "One or more errors occurred while updating the XML"
-            restored_backups = ErrorViewerDialog(files_backed_up, BACKUPS_DIR, xml_directory, self, title, missing_text + "\n\n" + text).restored_backups
+            restored_backups = ErrorViewerDialog(files_backed_up, BACKUPS_DIR, xml_directory, self, title, missing_text + "\n\n", text).restored_backups
             # tkinter.messagebox.showerror("Unable to find games", "The following games could not be found and were not changed:\n  " + "\n  ".join(changes.keys()))
 
         if not restored_backups:
@@ -230,28 +224,29 @@ class MetadataEditorTab(ttk.Frame):
 
     def show_help(self):
 
-        left = "C:\\Users\\afrm\\Desktop\\flashpoint-devtools\\xmlbackups\\Flash.xml"
-        right = "C:\\Users\\afrm\\Desktop\\fps\\data\\games\\Flash.xml"
-        DiffViewDialog(left, right, self, "Changes made to test.xml", "Hello!")
+        text = """
+Basically a batch XML element text updater
 
+The changes file must be in the following format:
 
-#         text = """
-# Basically a batch XML element text updater
+GAME: $GAME_ID
+$ELEMENT_NAME: New Value
 
-# The changes file must be in the following format:
+Each new game, except for the last, should be followed by three dashes (---). The first game should not be preceded by three dashes.
 
-# GAME $GAME_ID
-# $ELEMENT_NAME: New Value
+For example:
+GAME: dbde64aa-fbd7-4837-bba5-63d923092486
+  Title: Swag
+  Genre: Adventure; Point'n'Click
+  Publisher: Newgrounds.com
 
-# For example:
-# GAME dbde64aa-fbd7-4837-bba5-63d923092486
-#     Title: Swag
-#     Genre: Adventure, Point'n'Click
-#     Publisher: Newgrounds.com
+---
 
-# GAME ea84e831-ee4f-44ec-b769-b657c8ffa8e3
-#     Genre: Puzzle, Tetris, Physics
+GAME: ea84e831-ee4f-44ec-b769-b657c8ffa8e3
+Genre:
+  - Puzzle
+  - Tetris
+  - Physics
+"""
 
-# Any leading and trailing whitespace is automatically stripped, so it can be used to increase readability"""
-
-#         tkinter.messagebox.showinfo("Help", text)
+        tkinter.messagebox.showinfo("Help", text)
