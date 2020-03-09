@@ -278,10 +278,10 @@ class XmlUpdater:
                     self.update_xml_element(xml_root, new_add_app_el, changes_list, game_id, create_elements_whitelist, True)
 
                 elif isinstance(changes_list, str) and (app_name == "Extras" or app_name == "Message"):
-                    application_path = ":extras:" if changes_list == "Extras" else ":message:"
+                    application_path = ":extras:" if app_name == "Extras" else ":message:"
                     new_add_app_el = self.create_additional_application(xml_root, game_id, app_name, application_path, changes_list)
                 else:
-                    msg = f"Inside of the 'Additional Applications' key, only 'Extras' and 'Message' can have a string as a value"
+                    msg = f"Inside of the 'Additional Applications' key, only 'Extras' and 'Message' can have a string as a value.\nIf you're trying to create an alternate, the value must be a mapping."
                     raise self.ForbiddenElementChange(msg, self.current_game_id, None)
 
     def get_updated_xml(self, changes: dict, source_xml_path: str, create_elements_whitelist: list) -> Tuple[ET.Element, set, list]:
