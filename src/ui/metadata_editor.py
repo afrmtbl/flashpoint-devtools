@@ -101,7 +101,7 @@ class MetadataEditorTab(ttk.Frame):
         self.change_file_path.delete(0, tk.END)
         self.change_file_path.insert(0, file)
 
-    def update_metadata_new(self, xml_directory, changes_file_path):
+    def update_metadata(self, xml_directory, changes_file_path):
 
         def freeze():
             self.generating_xml = True
@@ -146,6 +146,10 @@ class MetadataEditorTab(ttk.Frame):
             tkinter.messagebox.showerror("Invalid YAML", str(e))
             unfreeze()
             return
+        except Exception as e:
+            tkinter.messagebox.showerror("Error while parsing changes file", str(e))
+            unfreeze()
+            return
 
         platform_xml_files = os.listdir(xml_directory)
         platform_xml_files = [
@@ -168,9 +172,11 @@ class MetadataEditorTab(ttk.Frame):
             updater = XmlUpdater()
             updated_xml, games_changed, games_failed = updater.get_updated_xml(changes, file_path, create_elements_whitelist)
 
-            changes_in_file = {}
+            for game in games_failed:
+                view_error_prompts.append(game)
+                del changes[game.game_id]
 
-            view_error_prompts.extend(games_failed)
+            changes_in_file = {}
 
             if len(games_changed) > 0:
 
@@ -197,7 +203,7 @@ class MetadataEditorTab(ttk.Frame):
                 pass
 
             title = "One or more errors occurred while updating the XML"
-            restored_backups = ErrorViewerDialog(files_backed_up, BACKUPS_DIR, xml_directory, self, title, missing_text + "\n\n", text).restored_backups
+            restored_backups = ErrorViewerDialog(files_backed_up, BACKUPS_DIR, xml_directory, self, title, missing_text + "\n\n" + text).restored_backups
             # tkinter.messagebox.showerror("Unable to find games", "The following games could not be found and were not changed:\n  " + "\n  ".join(changes.keys()))
 
         if not restored_backups:
@@ -212,7 +218,7 @@ class MetadataEditorTab(ttk.Frame):
         if not self.generating_xml:
 
             thread = threading.Thread(
-                target=self.update_metadata_new,
+                target=self.update_metadata,
                 args=(
                     self.xml_path.get(),
                     self.change_file_path.get()
