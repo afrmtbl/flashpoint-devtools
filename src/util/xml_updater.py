@@ -37,6 +37,9 @@ class ChangesParser:
     class DuplicateGameId(Exception):
         pass
 
+    class InvalidChangesSyntax(Exception):
+        pass
+
     @staticmethod
     def process_yaml_value(value):
         processed_val = None
@@ -54,7 +57,7 @@ class ChangesParser:
         return processed_val
 
     @staticmethod
-    def process_yaml(yaml_document: Dict, is_additional_application: bool = False):
+    def process_yaml(yaml_document: Dict, is_additional_application: bool = False) -> Dict:
         """
         A post-processing operation on the YAML data to be used before putting
         it into the XML.
@@ -100,36 +103,45 @@ class ChangesParser:
         return len(re.findall(query, string, flags=re.MULTILINE))
 
     @staticmethod
+    def parse_changes_str(changes_str: str) -> Dict:
+        """Turns the user-supplied changes file into a dictionary."""
+        changes: Dict[str, dict] = {}
+
+        game_id_count = ChangesParser.find_all_occurrences("^GAME:", changes_str)
+        new_document_count = ChangesParser.find_all_occurrences("^---", changes_str)
+
+        if new_document_count != game_id_count - 1:
+            raise ChangesParser.NotEnoughDocuments("Each new game, except for the last, should be followed by three dashes (---). The first game should not be preceded by three dashes.")
+
+        for index, document in enumerate(yaml.safe_load_all(changes_str)):
+            if isinstance(document, str):
+                raise ChangesParser.InvalidChangesSyntax("The changes file is in an incorrect format")
+
+            if not document or "GAME" not in document:
+                raise ChangesParser.InvalidGameId(f"Document {index + 1} is missing a \'GAME\' entry")
+
+            if "ID" in document:
+                raise ChangesParser.ForbiddenElementChange("The \'ID\' element cannot be modified")
+
+            game_id = document["GAME"]
+
+            if not game_id:
+                raise ChangesParser.InvalidGameId(f"Document {index + 1} is has an invalid \'GAME\' value")
+
+            if game_id in changes:
+                raise ChangesParser.DuplicateGameId(f"The game ID \'{game_id}\' already has changes associated with it")
+
+            del document["GAME"]
+            changes[game_id] = ChangesParser.process_yaml(document)
+
+        return changes
+
+    @staticmethod
     def parse_changes_file(file_path: str) -> Dict:
         """Turns the user-supplied changes file into a dictionary."""
 
-        changes: Dict[str, dict] = {}
-
         with open(file_path, "r", encoding="utf8") as changes_file:
-            changes_str = changes_file.read()
-
-            game_id_count = ChangesParser.find_all_occurrences("^GAME:", changes_str)
-            new_document_count = ChangesParser.find_all_occurrences("^---", changes_str)
-
-            if new_document_count != game_id_count - 1:
-                raise ChangesParser.NotEnoughDocuments("Each new game, except for the last, should be followed by three dashes (---). The first game should not be preceded by three dashes.")
-
-            for index, document in enumerate(yaml.safe_load_all(changes_str)):
-                if not document or "GAME" not in document:
-                    raise ChangesParser.InvalidGameId(f"Document {index + 1} is missing a \'GAME\' entry")
-
-                if "ID" in document:
-                    raise ChangesParser.ForbiddenElementChange("The \'ID\' element cannot be modified")
-
-                game_id = document["GAME"]
-
-                if game_id in changes:
-                    raise ChangesParser.DuplicateGameId(f"The game ID \'{game_id}\' already has changes associated with it")
-
-                del document["GAME"]
-                changes[game_id] = ChangesParser.process_yaml(document)
-
-        return changes
+            return ChangesParser.parse_changes_str(changes_file.read())
 
 
 try_get_ret = Union[ET.Element, Tuple[ET.Element, Optional[str]]]
