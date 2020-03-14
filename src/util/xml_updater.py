@@ -96,7 +96,7 @@ class ChangesParser:
         return yaml_document
 
     @staticmethod
-    def find_all_occurences(query, string):
+    def find_all_occurrences(query, string) -> int:
         return len(re.findall(query, string, flags=re.MULTILINE))
 
     @staticmethod
@@ -108,8 +108,8 @@ class ChangesParser:
         with open(file_path, "r", encoding="utf8") as changes_file:
             changes_str = changes_file.read()
 
-            game_id_count = ChangesParser.find_all_occurences("^GAME:", changes_str)
-            new_document_count = ChangesParser.find_all_occurences("^---", changes_str)
+            game_id_count = ChangesParser.find_all_occurrences("^GAME:", changes_str)
+            new_document_count = ChangesParser.find_all_occurrences("^---", changes_str)
 
             if new_document_count != game_id_count - 1:
                 raise ChangesParser.NotEnoughDocuments("Each new game, except for the last, should be followed by three dashes (---). The first game should not be preceded by three dashes.")
