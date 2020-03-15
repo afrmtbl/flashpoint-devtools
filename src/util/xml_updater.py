@@ -307,7 +307,7 @@ class XmlUpdater:
         # Collect game IDs that were successfully changed
         # so we can compare against the ones specified in the changes file
         games_changed: set = set()
-        games_failed: List[Exception] = []
+        games_failed: Dict[str, Exception] = {}
 
         for game in root.iter("Game"):
             game_id_element, game_id = self.try_get_element("ID", game, True, True)
@@ -319,12 +319,12 @@ class XmlUpdater:
                     self.update_xml_element(root, game, changes_list, game_id, create_elements_whitelist)
                     games_changed.add(game_id)
                 except Exception as e:
-                    games_failed.append(e)
+                    games_failed[game_id] = e
 
         # The game couldn't be found
         for game in changes:
-            if game not in games_changed:
-                games_failed.append(self.GameNotFound(f"'{game}' could not be found", game))
+            if game not in games_changed and game not in games_failed:
+                games_failed[game] = self.GameNotFound(f"'{game}' could not be found", game)
 
         return tree, games_changed, games_failed
 
