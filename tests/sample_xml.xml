@@ -1,0 +1,224 @@
+<LaunchBox>
+  <Game>
+    <ID>9aeb262e-5a55-48a4-8eb1-265925880b90</ID>
+    <Title>Rush Rush</Title>
+    <Series/>
+    <Developer>Caio Fragoso, Daniel Blaze, Thiago Mezanini Bertoni, Willian Lopes, Timepix Interactive</Developer>
+    <Publisher/>
+    <Platform>Unity</Platform>
+    <DateAdded>2019-09-14T18:03:09.321+10:00</DateAdded>
+    <Broken>false</Broken>
+    <Hide>false</Hide>
+    <PlayMode>Single Player</PlayMode>
+    <Status>Playable</Status>
+    <Notes/>
+    <Genre>Driving</Genre>
+    <Source>Y8.com</Source>
+    <ApplicationPath>FPSoftware\startUnity.bat</ApplicationPath>
+    <CommandLine>5.x http://img-hws.y8.com/cloud/y8-unity3d-game/contents/item_versions/unity3d_games/348/original/index.html</CommandLine>
+    <ReleaseDate>2019</ReleaseDate>
+    <Version/>
+    <OriginalDescription/>
+    <Language>en</Language>
+  </Game>
+  <Game>
+    <ApplicationPath>FPSoftware\startUnity.bat</ApplicationPath>
+    <CommandLine>5.x http://commondatastorage.googleapis.com/itchio/upload2/game/275380/index.html</CommandLine>
+    <ConfigurationCommandLine/>
+    <DateAdded>2019-07-21T00:11:44.471230+00:00</DateAdded>
+    <DateModified>2019-07-21T00:11:44.471230+00:00</DateModified>
+    <Developer>Michael Cook</Developer>
+    <ID>ba3d2d72-6192-2925-3bae-2db312ffd4a8</ID>
+    <MusicPath/>
+    <Notes>Elite Down is a game designed by ANGELINA, an artificially intelligent piece of software designed by me, Michael Cook, an AI and Computational Creativity researcher. I've actually lost the commentary for this one - this probably means I generated it during the system's development, and didn't keep it. I remember liking the game itself because the theme fits together quite nicely - the theme was 'war', guns kill you, collecting soldiers gains you points, and there's a grassy/barracks-like theme. It feels like you're rescuing these soldiers from a war and escaping with them.</Notes>
+    <Platform>Unity</Platform>
+    <Publisher/>
+    <RootFolder>Games</RootFolder>
+    <SortTitle/>
+    <Source>https://gamesbyangelina.itch.io/</Source>
+    <Status>Playable</Status>
+    <Title>Elite Down</Title>
+    <Series/>
+    <PlayMode>Single Player</PlayMode>
+    <Region/>
+    <PlayCount>0</PlayCount>
+    <VideoPath/>
+    <Hide>false</Hide>
+    <Broken>false</Broken>
+    <Genre>Toy</Genre>
+  </Game>
+  <Game>
+    <ApplicationPath>FPSoftware\startUnity.bat</ApplicationPath>
+    <CommandLine>5.x http://commondatastorage.googleapis.com/itchio/upload2/game/275361/index.html</CommandLine>
+    <ConfigurationCommandLine/>
+    <DateAdded>2019-07-20T00:04:20.485325+00:00</DateAdded>
+    <DateModified>2019-07-20T00:04:20.485325+00:00</DateModified>
+    <Developer>Michael Cook</Developer>
+    <ID>25a91b3a-a9e1-db58-9e97-75c33bbe25fa</ID>
+    <MusicPath/>
+    <Notes>Wheel And Steal is a game designed by ANGELINA, an artificially intelligent piece of software designed by me, Michael Cook - I'm a researcher at Goldsmiths in the University of London. Wheel And Steal was generated during an interview with Philippa Warr, and is one of the most coherent designs this version of the software ever produced. The input word was 'thief' - the player has to avoid 'gangs' (which actually come across more like guards, by coincidence), it identifies a good mood for music selection, and even chooses some appropriate textures - this was towards the end of the project and it had learned a lot more from its Twitter followers at this point. You can still see a lot of oddities here, including the return of grey textureless models (a bug from the way ANGELINA downloaded and imported models automatically). I quite like this one though.</Notes>
+    <Platform>Unity</Platform>
+    <Publisher/>
+    <RootFolder>Games</RootFolder>
+    <SortTitle/>
+    <Source>https://gamesbyangelina.itch.io/</Source>
+    <Status>Playable</Status>
+    <Title>Wheel and Steal</Title>
+    <Series/>
+    <PlayMode>Single Player</PlayMode>
+    <Region/>
+    <PlayCount>0</PlayCount>
+    <VideoPath/>
+    <Hide>false</Hide>
+    <Broken>false</Broken>
+    <Genre>Arcade</Genre>
+  </Game>
+  <Game>
+    <ApplicationPath>FPSoftware\startUnity.bat</ApplicationPath>
+    <CommandLine>5.x http://chat.kongregate.com/gamez/0010/2655/live/index.html</CommandLine>
+    <ConfigurationCommandLine/>
+    <DateAdded>2019-07-20T00:04:18.955594+00:00</DateAdded>
+    <DateModified>2019-07-20T00:04:18.955594+00:00</DateModified>
+    <Developer>MOG</Developer>
+    <ID>d3d2fa4d-31d3-ee55-0df6-922f76c6efc0</ID>
+    <MusicPath/>
+    <Notes/>
+    <Platform>Unity</Platform>
+    <Publisher/>
+    <RootFolder>Games</RootFolder>
+    <SortTitle/>
+    <Source>http://www.kongregate.com/</Source>
+    <Status>Playable</Status>
+    <Title>3D Text Adventure!</Title>
+    <Series/>
+    <PlayMode>Single Player</PlayMode>
+    <Region/>
+    <PlayCount>0</PlayCount>
+    <VideoPath/>
+    <Hide>false</Hide>
+    <Broken>false</Broken>
+    <Genre>RPG</Genre>
+  </Game>
+  <Game>
+    <ApplicationPath>FPSoftware\startUnity.bat</ApplicationPath>
+    <CommandLine>5.x http://cdn.gameflare.com/games/2016-2/index.html</CommandLine>
+    <ConfigurationCommandLine/>
+    <DateAdded>2019-07-16T06:11:30.960304+00:00</DateAdded>
+    <DateModified>2019-07-16T06:11:30.960304+00:00</DateModified>
+    <Developer>Columbia Pictures</Developer>
+    <ID>9a032158-7e2d-e193-6b63-1e8a4bceb239</ID>
+    <MusicPath/>
+    <Notes/>
+    <Platform>Unity</Platform>
+    <Publisher/>
+    <RootFolder>Games</RootFolder>
+    <SortTitle/>
+    <Source>http://www.gameflare.com</Source>
+    <Status>Playable</Status>
+    <Title>The Amazing Spider-Man 2: Endless Swing</Title>
+    <Series/>
+    <PlayMode>Single Player</PlayMode>
+    <Region/>
+    <PlayCount>0</PlayCount>
+    <VideoPath/>
+    <Hide>false</Hide>
+    <Broken>false</Broken>
+    <Genre>Arcade</Genre>
+  </Game>
+  <Game>
+    <ApplicationPath>FPSoftware\startUnity.bat</ApplicationPath>
+    <CommandLine>3.x http://www.y8.com/games/alternator/index.html</CommandLine>
+    <ConfigurationCommandLine/>
+    <DateAdded>2019-07-04T00:33:46.018523+00:00</DateAdded>
+    <DateModified>2019-07-04T00:33:46.018523+00:00</DateModified>
+    <Developer>Dean Tuttle, Bryan Moses, John Welsh</Developer>
+    <ID>af0a8e8b-a08b-2d56-f598-8b150ad48fc1</ID>
+    <MusicPath/>
+    <Notes>Original description: Alternator is an awesome free online racing game. Set 50 years in the future, you build your car from cutting edge racing technology and blast your way through 9 events of the Wild Roads Rally. Can you crush the competitors and take down the energy empire of bad dude Slickrod?
+
+Game Help: https://web.archive.org/web/20140627045704/http://www.abc.net.au/abc3/games/alternator/help/
+Alternator website: http://www.alternatorindustries.com/Alternator/Home.html
+Several videos from the developer's YouTube channel are included in the Extras.</Notes>
+    <Platform>Unity</Platform>
+    <Publisher>Australian Broadcasting Corporation, Screen Australia, Screen NSW</Publisher>
+    <RootFolder>Games</RootFolder>
+    <SortTitle/>
+    <Source>Y8.com</Source>
+    <Status>Playable</Status>
+    <Title>Testing Changes 12345</Title>
+    <Series/>
+    <PlayMode>Single Player</PlayMode>
+    <Region/>
+    <PlayCount>0</PlayCount>
+    <VideoPath/>
+    <Hide>false</Hide>
+    <Broken>false</Broken>
+    <Genre>Racing</Genre>
+    <ReleaseDate/>
+    <Version/>
+    <OriginalDescription/>
+    <Language/>
+  </Game>
+  <Game>
+    <ApplicationPath>FPSoftware\startUnity.bat</ApplicationPath>
+    <CommandLine>5.x http://chat.kongregate.com/gamez/0010/2655/live/index.html</CommandLine>
+    <ConfigurationCommandLine/>
+    <DateAdded>2019-07-20T00:04:18.955594+00:00</DateAdded>
+    <DateModified>2019-07-20T00:04:18.955594+00:00</DateModified>
+    <Developer>MOG</Developer>
+    <ID>d3d2fa4d-31d3-ee55-0df6-922f76c6efc0</ID>
+    <MusicPath/>
+    <Notes/>
+    <Platform>Unity</Platform>
+    <Publisher/>
+    <RootFolder>Games</RootFolder>
+    <SortTitle/>
+    <Source>http://www.kongregate.com/</Source>
+    <Status>Playable</Status>
+    <Title>3D Text Adventure!</Title>
+    <Series/>
+    <PlayMode>Single Player</PlayMode>
+    <Region/>
+    <PlayCount>0</PlayCount>
+    <VideoPath/>
+    <Hide>false</Hide>
+    <Broken>false</Broken>
+    <Genre>RPG</Genre>
+  </Game>
+  <AdditionalApplication>
+    <Id>7172bd63-2cf2-4d6b-aeac-9128706c4c67</Id>
+    <GameID>af0a8e8b-a08b-2d56-f598-8b150ad48fc1</GameID>
+    <Name>Message</Name>
+    <ApplicationPath>:message:</ApplicationPath>
+    <CommandLine>Hello</CommandLine>
+    <AutoRunBefore>false</AutoRunBefore>
+    <WaitForExit>false</WaitForExit>
+  </AdditionalApplication>
+  <AdditionalApplication>
+    <Id>def76039-9f49-4403-a1cc-2d6f01fb7821</Id>
+    <GameID>d3d2fa4d-31d3-ee55-0df6-922f76c6efc0</GameID>
+    <Name>Extras</Name>
+    <ApplicationPath>:extras:</ApplicationPath>
+    <CommandLine>dsa</CommandLine>
+    <AutoRunBefore>false</AutoRunBefore>
+    <WaitForExit>false</WaitForExit>
+  </AdditionalApplication>
+  <AdditionalApplication>
+    <Id>e40a0759-3716-47db-a24f-811f21275a5d</Id>
+    <GameID>d3d2fa4d-31d3-ee55-0df6-922f76c6efc0</GameID>
+    <Name>Message</Name>
+    <ApplicationPath>:message:</ApplicationPath>
+    <CommandLine>dsa</CommandLine>
+    <AutoRunBefore>false</AutoRunBefore>
+    <WaitForExit>false</WaitForExit>
+  </AdditionalApplication>
+  <AdditionalApplication>
+    <Id>def76039-9f49-4403-a1cc-2d6f01fb7821</Id>
+    <GameID>d3d2fa4d-31d3-ee55-0df6-922f76c6efc0</GameID>
+    <Name>Version 2</Name>
+    <ApplicationPath>flash.exe</ApplicationPath>
+    <CommandLine>launchv2</CommandLine>
+    <AutoRunBefore>false</AutoRunBefore>
+    <WaitForExit>false</WaitForExit>
+  </AdditionalApplication>
+</LaunchBox>
