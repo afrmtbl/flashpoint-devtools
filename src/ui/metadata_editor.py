@@ -172,9 +172,9 @@ class MetadataEditorTab(ttk.Frame):
             updater = XmlUpdater()
             updated_xml, games_changed, games_failed = updater.get_updated_xml(changes, file_path, create_elements_whitelist)
 
-            for game in games_failed:
-                view_error_prompts.append(game)
-                del changes[game.game_id]
+            for game_id, error in games_failed.items():
+                view_error_prompts.append(error)
+                del changes[game_id]
 
             changes_in_file = {}
 
