@@ -222,7 +222,7 @@ class XmlUpdater:
                 raise self.MissingElement(error_text, game_id, key)
 
     def create_additional_application(self, xml_root: ET.Element, game_id: str, app_name: str, application_path: str, command_line: str) -> ET.Element:
-        new_add_app_el = ET.SubElement(xml_root, "AdditionalApplication")
+        new_add_app_el = ET.Element("AdditionalApplication")
 
         children = {
             "Id": str(uuid.uuid4()),
@@ -288,10 +288,12 @@ class XmlUpdater:
 
                     new_add_app_el = self.create_additional_application(xml_root, game_id, app_name, application_path, command_line)
                     self.update_xml_element(xml_root, new_add_app_el, changes_list, game_id, create_elements_whitelist, True)
+                    xml_root.append(new_add_app_el)
 
                 elif isinstance(changes_list, str) and (app_name == "Extras" or app_name == "Message"):
                     application_path = ":extras:" if app_name == "Extras" else ":message:"
                     new_add_app_el = self.create_additional_application(xml_root, game_id, app_name, application_path, changes_list)
+                    xml_root.append(new_add_app_el)
                 else:
                     msg = f"Inside of the 'Additional Applications' key, only 'Extras' and 'Message' can have a string as a value.\nIf you're trying to create an alternate, the value must be a mapping."
                     raise self.ForbiddenElementChange(msg, self.current_game_id, None)
@@ -318,6 +320,11 @@ class XmlUpdater:
                     games_changed.add(game_id)
                 except Exception as e:
                     games_failed.append(e)
+
+        # The game couldn't be found
+        for game in changes:
+            if game not in games_changed:
+                games_failed.append(self.GameNotFound(f"'{game}' could not be found", game))
 
         return tree, games_changed, games_failed
 
@@ -372,15 +379,15 @@ if __name__ == "__main__":
     changes = ChangesParser.parse_changes_file(f"{home}/Desktop/changes.yml")
     exp = explain_changes(changes)
 
-    print(changes)
+    # print(changes)
 
     # print(exp)
     # import json
     # print(json.dumps(changes, indent=4))
-    # updater = XmlUpdater()
+    updater = XmlUpdater()
 
-    # updated_xml, games_changed, games_failed = updater.get_updated_xml(changes, f"{home}/Desktop/platform_xmls/Flash.xml", ["Tags", "OriginalDescription", "ReleaseDate"])
-    # print(games_changed)
+    updated_xml, games_changed, games_failed = updater.get_updated_xml(changes, f"{home}/Desktop/platform_xmls/Flash.xml", ["Tags", "OriginalDescription", "ReleaseDate"])
+    print(games_changed, games_failed)
 
     # print(games_failed)
 
