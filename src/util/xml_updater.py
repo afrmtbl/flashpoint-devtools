@@ -88,6 +88,10 @@ class ChangesParser:
 
         if not is_additional_application and "Additional Applications" in static_keys:
             additional_apps = yaml_document["Additional Applications"]
+
+            if not isinstance(additional_apps, dict):
+                raise ChangesParser.InvalidChangesSyntax("'Additional Applications' must be set to a mapping")
+
             for app in additional_apps:
                 app_val = additional_apps[app]
 
@@ -122,6 +126,9 @@ class ChangesParser:
 
             if "ID" in document:
                 raise ChangesParser.ForbiddenElementChange("The \'ID\' element cannot be modified")
+
+            if "Curation Notes" in document:
+                del document["Curation Notes"]
 
             game_id = document["GAME"]
 
@@ -300,7 +307,6 @@ class XmlUpdater:
 
     def get_updated_xml(self, changes: dict, source_xml_path: str, create_elements_whitelist: list) -> Tuple[ET.Element, set, list]:
         """Wrapper function for `update_xml_element` that simplifies applying changes to an XML file."""
-
         parser = ET.XMLParser(remove_blank_text=True)
         tree = ET.parse(source_xml_path, parser)
         root = tree.getroot()
@@ -320,11 +326,6 @@ class XmlUpdater:
                     games_changed.add(game_id)
                 except Exception as e:
                     games_failed[game_id] = e
-
-        # The game couldn't be found
-        for game in changes:
-            if game not in games_changed and game not in games_failed:
-                games_failed[game] = self.GameNotFound(f"'{game}' could not be found", game)
 
         return tree, games_changed, games_failed
 
@@ -386,7 +387,8 @@ if __name__ == "__main__":
     # print(json.dumps(changes, indent=4))
     updater = XmlUpdater()
 
-    updated_xml, games_changed, games_failed = updater.get_updated_xml(changes, f"{home}/Desktop/platform_xmls/Flash.xml", ["Tags", "OriginalDescription", "ReleaseDate"])
+    whitelist = ["Library", "Version", "Tags", "Curation Notes", "AlternateTitles", "ReleaseDate", "Language", "OriginalDescription"]
+    updated_xml, games_changed, games_failed = updater.get_updated_xml(changes, f"{home}/Desktop/platform_xmls/Unity.xml", whitelist)
     print(games_changed, games_failed)
 
     # print(games_failed)
