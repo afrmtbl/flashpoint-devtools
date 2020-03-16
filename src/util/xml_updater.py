@@ -116,7 +116,7 @@ class ChangesParser:
         new_document_count = ChangesParser.find_all_occurrences("^---", changes_str)
 
         if new_document_count != game_id_count - 1:
-            raise ChangesParser.NotEnoughDocuments("Each new game, except for the last, should be followed by three dashes (---). The first game should not be preceded by three dashes.")
+            raise ChangesParser.NotEnoughDocuments("Each new game, except for the last, should be followed by three dashes (---). The first game should not be preceded by three dashes. GAME should be followed by a colon (GAME: id).")
 
         for index, document in enumerate(yaml.safe_load_all(changes_str)):
             if isinstance(document, str):
