@@ -46,11 +46,12 @@ class ChangesParser:
 
         if isinstance(value, dict):
             raise ChangesParser.ForbiddenElementChange()
-
         elif isinstance(value, list):
             processed_val = "; ".join([ChangesParser.process_yaml_value(el) for el in value])
         elif isinstance(value, bool):
             processed_val = str(value).lower()
+        elif value is None:
+            processed_val = None
         else:
             processed_val = str(value)
 
@@ -220,7 +221,10 @@ class XmlUpdater:
             key_element = element.find(key)
 
             if key_element is not None:
-                key_element.text = str(value)
+                if value is None:
+                    key_element.text = None
+                else:
+                    key_element.text = str(value)
             elif key in create_elements_whitelist:
                 created_el = ET.SubElement(element, key)
                 created_el.text = value
@@ -355,7 +359,11 @@ def explain_changes(all_changes: dict, is_additional_application: bool = False) 
                     else:
                         raise Exception(f"Invalid additional application value ({app_name}, {app_changes})")
             else:
-                line = f"\"{element_name}\" element was changed to \"{val}\"\n"
+                if val is None:
+                    line = f"\"{element_name}\" element value was removed"
+                else:
+                    line = f"\"{element_name}\" element was changed to \"{val}\"\n"
+
                 cur_spacing = 2 * spacing if is_additional_application else spacing
                 suffix = "" if is_additional_application else "\n"
                 explanation += suffix + cur_spacing + line
@@ -380,16 +388,16 @@ if __name__ == "__main__":
     changes = ChangesParser.parse_changes_file(f"{home}/Desktop/changes.yml")
     exp = explain_changes(changes)
 
-    # print(changes)
+    print(changes)
 
-    # print(exp)
+    print(exp)
     # import json
     # print(json.dumps(changes, indent=4))
-    updater = XmlUpdater()
+    # updater = XmlUpdater()
 
-    whitelist = ["Library", "Version", "Tags", "Curation Notes", "AlternateTitles", "ReleaseDate", "Language", "OriginalDescription"]
-    updated_xml, games_changed, games_failed = updater.get_updated_xml(changes, f"{home}/Desktop/platform_xmls/Unity.xml", whitelist)
-    print(games_changed, games_failed)
+    # whitelist = ["Library", "Version", "Tags", "Curation Notes", "AlternateTitles", "ReleaseDate", "Language", "OriginalDescription"]
+    # updated_xml, games_changed, games_failed = updater.get_updated_xml(changes, f"{home}/Desktop/platform_xmls/Unity.xml", whitelist)
+    # print(games_changed, games_failed)
 
     # print(games_failed)
 
